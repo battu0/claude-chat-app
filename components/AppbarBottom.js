@@ -56,8 +56,8 @@ const AppbarBottom = ({ messages, setMessages, apiClient }) => {
         style={styles.input}
         value={input}
         onChangeText={setInput}
-        placeholder="Type your message..."
         placeholderTextColor={theme.colors.onSurface}
+        placeholder="Type your message..."
         onSubmitEditing={sendMessage}
       />
       <IconButton

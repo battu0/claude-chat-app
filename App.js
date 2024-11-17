@@ -1,27 +1,32 @@
-import React, { useState } from 'react'
-import { PaperProvider } from 'react-native-paper'
-import theme from './utils/theme'
-import Chat from './screens/Chat'
+import './gesture-handler.native'
+import React from 'react'
+import { View } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Onboarding from './components/Onboarding'
-import SelectPersonality from './components/SelectPersonality'
-import ModalHistory from './components/modals/ModalHistory'
+import DrawerNavigator from './navigation/DrawerNavigaton'
+
+const Stack = createNativeStackNavigator()
+
+const getIsSignedIn = () => {
+  // logic goes here
+  return true
+}
 
 export default function App() {
-  const [modalHistoryVisible, setModalHistoryVisible] = useState(false)
-
-  const handleOpenModalHistory = () => {
-    setModalHistoryVisible(true)
-  }
+  const isSignedIn = getIsSignedIn()
 
   return (
-    <PaperProvider theme={theme}>
-      {/* <Onboarding /> */}
-      {/* <SelectPersonality /> */}
-      <Chat onOpenModalHistory={handleOpenModalHistory} />
-      <ModalHistory
-        visible={modalHistoryVisible}
-        onClose={() => setModalHistoryVisible(false)}
-      />
-    </PaperProvider>
+    <NavigationContainer>
+      {isSignedIn ? (
+        <>
+          <DrawerNavigator />
+        </>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen name="Onboarding" component={Onboarding} />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
   )
 }
