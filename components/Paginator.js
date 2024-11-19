@@ -1,20 +1,17 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import theme from '../utils/theme'
 
 const Paginator = ({ data, currentIndex }) => {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', height: 64 }}>
       {data.map((_, i) => {
         return (
           <View
             style={[
               styles.dot,
               {
-                backgroundColor:
-                  currentIndex === i
-                    ? theme.colors.primary
-                    : theme.colors.primaryFixed,
+                opacity: currentIndex === i ? 1 : 0.3,
               },
             ]}
             key={i.toString()}
@@ -27,10 +24,11 @@ const Paginator = ({ data, currentIndex }) => {
 
 const styles = StyleSheet.create({
   dot: {
-    width: 8,
-    height: 8,
+    width: 10,
+    height: 10,
     borderRadius: 5,
-    marginHorizontal: 4,
+    marginHorizontal: 8,
+    backgroundColor: theme.colors.primary,
   },
 })
 

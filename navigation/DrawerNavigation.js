@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, useWindowDimensions } from 'react-native'
 import {
   DrawerContentScrollView,
   DrawerItem,
@@ -8,10 +8,16 @@ import HomeScreen from '../screens/HomeScreen'
 import ChatScreen from '../screens/ChatScreen'
 import { Icon } from 'react-native-paper'
 import APIKeyPage from '../screens/APIKeyPage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Updates from 'expo-updates'
 
 const Drawer = createDrawerNavigator()
 
-function CustomeDrawerContent(props) {
+// TO-DO:
+// - Add drawer item to drawer's footer that reset the viewed-onboarding value
+// - Can app be reloaded when user presses on a drawer item?
+
+function CustomDrawerContent(props) {
   return (
     <View style={styles.container}>
       <DrawerContentScrollView {...props}>
@@ -31,6 +37,16 @@ function CustomeDrawerContent(props) {
 
       <View style={styles.footerContainer}>
         <DrawerItem
+          label="Reload App"
+          labelStyle={styles.drawerItemLabel}
+          icon={() => <Icon source="reload" size={24} />}
+          // onPress={() => props.navigation.navigate('Chat')}
+          onPress={async () => {
+            await AsyncStorage.removeItem('viewed-onboarding')
+            await Updates.reloadAsync()
+          }}
+        />
+        <DrawerItem
           label="API Key"
           labelStyle={styles.drawerItemLabel}
           icon={() => <Icon source="key" size={24} />}
@@ -49,16 +65,20 @@ function CustomeDrawerContent(props) {
   )
 }
 
-function DrawerNavigaton() {
+function DrawerNavigation() {
+  const dimensions = useWindowDimensions()
+  const isLargeScreen = dimensions.width >= 768
+
   return (
     <Drawer.Navigator
       initialRouteName="Chat"
-      drawerContent={CustomeDrawerContent}
-      screenOptions={
-        {
-          // headerTintColor: '#fff',
-        }
-      }
+      drawerContent={CustomDrawerContent}
+      screenOptions={{
+        // headerTintColor: '#fff',
+        drawerType: isLargeScreen ? 'permanent' : 'front',
+        // Header left's default icon is menu
+        // headerLeft:
+      }}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen name="Chat" component={ChatScreen} />
@@ -87,4 +107,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default DrawerNavigaton
+export default DrawerNavigation

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
-import { Button, Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { Image } from 'expo-image'
 import theme from '../utils/theme'
 
@@ -11,24 +11,17 @@ const OnboardingItem = ({ item }) => {
     <View style={[styles.container, { width }]}>
       <Image
         source={item.image}
+        style={[styles.image, { width }]}
         contentFit="contain"
-        style={[styles.image, { width: width * 0.6, height: height * 0.21 }]}
       />
 
-      <View style={{ rowGap: 56, alignItems: 'center' }}>
-        <View style={styles.textContainer}>
-          <Text style={styles.title} variant="titleLarge">
-            {item.title}
-          </Text>
-          <Text style={styles.description} variant="bodyLarge">
-            {item.description}
-          </Text>
-        </View>
-        <View style={styles.btnContainer}>
-          <Button mode="contained-tonal" style={styles.btn}>
-            GET STARTED
-          </Button>
-        </View>
+      <View style={{ flex: 0.3 }}>
+        <Text style={styles.title} variant="titleLarge">
+          {item.title}
+        </Text>
+        <Text style={styles.description} variant="bodyLarge">
+          {item.description}
+        </Text>
       </View>
     </View>
   )
@@ -36,24 +29,24 @@ const OnboardingItem = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    rowGap: 64,
   },
-  textContainer: {
-    rowGap: 26,
+  image: {
+    flex: 0.7,
+    justifyContent: 'center',
   },
   title: {
     color: theme.colors.onSurface,
     textAlign: 'center',
+    marginBottom: 8,
   },
   description: {
     color: theme.colors.onSurfaceVariant,
     textAlign: 'center',
+    paddingHorizontal: 64,
   },
-  btnContainer: {},
-  btn: {},
 })
 
 export default OnboardingItem

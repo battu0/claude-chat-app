@@ -1,15 +1,14 @@
 import React, { useState, useRef } from 'react'
-import { View, StyleSheet, FlatList, useWindowDimensions } from 'react-native'
-
-import slides from '../slides'
+import { View, StyleSheet, FlatList } from 'react-native'
+import { Button } from 'react-native-paper'
 import OnboardingItem from './OnboardingItem'
 import Paginator from './Paginator'
+import slides from '../slides'
 import theme from '../utils/theme'
 
-const Onboarding = () => {
+const Onboarding = ({ onSetViewedOnboarding }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const slidesRef = useRef(null)
-  const { width } = useWindowDimensions()
 
   const viewableItemsChanged = useRef(({ viewableItems }) => {
     setCurrentIndex(viewableItems[0].index)
@@ -17,9 +16,21 @@ const Onboarding = () => {
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current
 
+  const handleScroll = async () => {
+    if (currentIndex < slides.length - 1) {
+      slidesRef.current.scrollToIndex({ index: currentIndex + 1 })
+    } else {
+      try {
+        onSetViewedOnboarding()
+      } catch (e) {
+        console.log('Error set @viewed_onboarding: ', e)
+      }
+    }
+  }
+
   return (
-    <View style={[styles.container, { width }]}>
-      <View style={styles.content}>
+    <View style={styles.container}>
+      <View style={{ flex: 3 }}>
         <FlatList
           data={slides}
           renderItem={({ item }) => <OnboardingItem item={item} />}
@@ -28,16 +39,16 @@ const Onboarding = () => {
           pagingEnabled
           bounces={false}
           keyExtractor={(item) => item.id}
-          scrollEventThrottle={32}
           onViewableItemsChanged={viewableItemsChanged}
           viewabilityConfig={viewConfig}
+          scrollEventThrottle={32}
           ref={slidesRef}
-          style={{ flexGrow: 0 }}
         />
-        <View>
-          <Paginator data={slides} currentIndex={currentIndex} />
-        </View>
       </View>
+      <Paginator data={slides} currentIndex={currentIndex} />
+      <Button mode="contained" onPress={handleScroll}>
+        {currentIndex !== slides.length - 1 ? 'Continue' : 'Get started'}
+      </Button>
     </View>
   )
 }
@@ -45,13 +56,9 @@ const Onboarding = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.surface,
-  },
-  content: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    rowGap: 16,
+    backgroundColor: theme.colors.surface,
   },
 })
 
