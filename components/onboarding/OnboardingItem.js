@@ -2,7 +2,6 @@ import React from 'react'
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
 import { Text } from 'react-native-paper'
 import { Image } from 'expo-image'
-import theme from '../utils/theme'
 
 const OnboardingItem = ({ item }) => {
   const { width, height } = useWindowDimensions()
@@ -38,12 +37,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    color: theme.colors.onSurface,
     textAlign: 'center',
     marginBottom: 8,
   },
   description: {
-    color: theme.colors.onSurfaceVariant,
     textAlign: 'center',
     paddingHorizontal: 64,
   },

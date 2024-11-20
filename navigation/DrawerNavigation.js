@@ -5,17 +5,13 @@ import {
   createDrawerNavigator,
 } from '@react-navigation/drawer'
 import HomeScreen from '../screens/HomeScreen'
-import ChatScreen from '../screens/ChatScreen'
+import Chat from '../screens/Chat'
 import { Icon } from 'react-native-paper'
 import APIKeyPage from '../screens/APIKeyPage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Updates from 'expo-updates'
 
 const Drawer = createDrawerNavigator()
-
-// TO-DO:
-// - Add drawer item to drawer's footer that reset the viewed-onboarding value
-// - Can app be reloaded when user presses on a drawer item?
 
 function CustomDrawerContent(props) {
   return (
@@ -81,7 +77,7 @@ function DrawerNavigation() {
       }}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
-      <Drawer.Screen name="Chat" component={ChatScreen} />
+      <Drawer.Screen name="Chat" component={Chat} />
       <Drawer.Screen
         name="APIKey"
         component={APIKeyPage}

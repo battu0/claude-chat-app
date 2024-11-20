@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react'
 import { View, StyleSheet, FlatList } from 'react-native'
 import { Button } from 'react-native-paper'
-import OnboardingItem from './OnboardingItem'
-import Paginator from './Paginator'
+import OnboardingItem from '../components/onboarding/OnboardingItem'
+import Paginator from '../components/onboarding/Paginator'
 import slides from '../slides'
-import theme from '../utils/theme'
 
 const Onboarding = ({ onSetViewedOnboarding }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -58,7 +57,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
   },
 })
 

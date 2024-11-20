@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import theme from '../utils/theme'
 
 const Paginator = ({ data, currentIndex }) => {
   return (
@@ -28,7 +27,6 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     marginHorizontal: 8,
-    backgroundColor: theme.colors.primary,
   },
 })
 

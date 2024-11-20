@@ -1,98 +1,108 @@
-import 'react-native-get-random-values'
-import { v4 as uuidv4 } from 'uuid'
-import React, { useState, useEffect, useCallback } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import Message from '../components/Message'
-import AppbarBottom from '../components/AppbarBottom'
-import AppbarHeader from '../components/AppbarHeader'
-import theme from '../utils/theme'
-import Anthropic from '@anthropic-ai/sdk'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, FlatList, TextInput } from 'react-native'
+import { IconButton } from 'react-native-paper'
 
-// const anthropic = new Anthropic({
-//   apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
-// })
+// TO-DO:
+// 1. Change color styles
+// background, userMessageBubble/assistantMessageBubble bg, messageText, textInput container bg/bar bg
+// textInput color
+// 2. Style message bubbles
+// 3. Remove header
 
-const STORAGE_KEY = '@chat_data'
-
-const Chat = ({ onOpenModalHistory }) => {
-  // data: [{id, date, avatar, title, description, messages}]
-  // Create, Replace, Update, Delete
-  const [data, setData] = useState([])
-
-  const [messages, setMessages] = useState([])
-
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  const loadData = async () => {
-    try {
-      const storedData = await AsyncStorage.getItem(STORAGE_KEY)
-      if (storedData !== null) {
-        const parsedData = JSON.parse(storedData)
-        setData(parsedData)
-      }
-    } catch (error) {
-      console.log('Error loading data: ', error)
-    }
-  }
-
-  // useEffect(() => {
-  //   initChat()
-  // }, [])
-
-  // const initChat = async () => {
-  //   const newChat = {
-  //     id: uuidv4(),
-  //     date: new Date(),
-  //     avatar: 'avatar',
-  //     title: 'title',
-  //     description: 'description',
-  //     messages: [], // display messages
-  //   }
-  //   setData(newChat)
-  // }
+const Chat = () => {
+  const [messages, setMessages] = useState([
+    { role: 'user', content: 'Hi there' },
+    { role: 'assistant', content: 'Hi there' },
+  ])
+  const [input, setInput] = useState('')
 
   const renderMessage = ({ item }) => (
     <View style={styles.messageContainer}>
-      <Message item={item} />
+      <View
+        style={[
+          styles.messageBubble,
+          item.role === 'user'
+            ? styles.userMessageBubble
+            : styles.assistantMessageBubble,
+        ]}
+      >
+        <Text style={styles.messageText}>{item.content}</Text>
+      </View>
     </View>
   )
 
   return (
-    <SafeAreaView style={styles.container}>
-      <AppbarHeader onOpenModalHistory={onOpenModalHistory} />
+    <View style={styles.container}>
       <FlatList
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item, index) => index.toString()}
-        style={styles.messageList}
       />
-      <AppbarBottom
-        messages={messages}
-        setMessages={setMessages}
-        apiClient={anthropic}
-      />
-      <StatusBar style="auto" translucent={true} />
-    </SafeAreaView>
+
+      <View style={styles.inputContainer}>
+        <View style={styles.textInputContainer}>
+          <TextInput
+            style={styles.textInput}
+            value={input}
+            onChangeText={setInput}
+            placeholder="Type your message"
+            multiline
+          />
+        </View>
+        <IconButton icon="send" size={24} style={styles.sendButton} />
+      </View>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.surface,
-  },
-  messageList: {
-    flex: 1,
+    backgroundColor: '#0D0D0D',
   },
   messageContainer: {
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,
+  },
+  messageBubble: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  userMessageBubble: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#212121',
+  },
+  assistantMessageBubble: {
+    backgroundColor: '#0D0D0D',
+    alignSelf: 'flex-start',
+  },
+  messageText: {
+    fontSize: 16,
+    flexWrap: 'wrap',
+    color: '#fff',
+    alignSelf: 'center',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    padding: 16,
+  },
+  textInputContainer: {
+    flex: 1,
+    borderWidth: 2,
+    borderColor: '#2F2F2F',
+    borderRadius: 16,
+    minHeight: 40,
+    backgroundColor: '#242424',
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  textInput: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  sendButton: {
+    alignSelf: 'flex-end',
   },
 })
 

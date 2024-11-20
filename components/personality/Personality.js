@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Image, useWindowDimensions } from 'react-native'
 import { Button, Text } from 'react-native-paper'
-import theme from '../utils/theme'
 
 const Personality = ({ item }) => {
   const { width } = useWindowDimensions()
@@ -28,17 +27,12 @@ const Personality = ({ item }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     rowGap: 56,
-    // backgroundColor: 'aqua',
   },
   contentWrapper: {
-    // flex: 1,
     flexDirection: 'row',
-    // columnGap: 24,
-    // backgroundColor: 'black',
   },
   content: {
     width: '60%',
@@ -47,11 +41,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    color: theme.colors.onSurface,
     textAlign: 'center',
   },
   description: {
-    color: theme.colors.onSurfaceVariant,
     textAlign: 'center',
   },
 })

@@ -20,6 +20,4 @@ const theme = {
   },
 }
 
-// primary, on-primary, secondary, on-secondary, surface, surface-container, surface-container-high
-
 export default theme

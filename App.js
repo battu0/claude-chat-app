@@ -4,7 +4,7 @@ import { View, ActivityIndicator } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { NavigationContainer } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Onboarding from './components/Onboarding'
+import Onboarding from './screens/Onboarding'
 import DrawerNavigation from './navigation/DrawerNavigation'
 import theme from './utils/theme'
 
