@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, FlatList, TextInput } from 'react-native'
-import { IconButton } from 'react-native-paper'
-
-// TO-DO:
-// 1. Change color styles
-// background, userMessageBubble/assistantMessageBubble bg, messageText, textInput container bg/bar bg
-// textInput color
-// 2. Style message bubbles
-// 3. Remove header
+import { StyleSheet, View, FlatList } from 'react-native'
+import { IconButton, Searchbar, Text, useTheme } from 'react-native-paper'
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -16,50 +9,83 @@ const Chat = () => {
   ])
   const [input, setInput] = useState('')
 
+  const theme = useTheme()
+
   const renderMessage = ({ item }) => (
     <View style={styles.messageContainer}>
       <View
         style={[
           styles.messageBubble,
           item.role === 'user'
-            ? styles.userMessageBubble
-            : styles.assistantMessageBubble,
+            ? [
+                styles.userMessageBubble,
+                {
+                  backgroundColor: theme.colors.surfaceContainerHigh,
+                },
+              ]
+            : [
+                styles.assistantMessageBubble,
+                {
+                  backgroundColor: theme.colors.secondary,
+                },
+              ],
         ]}
       >
-        <Text style={styles.messageText}>{item.content}</Text>
+        <Text
+          style={[
+            styles.messageText,
+            item.role === 'user'
+              ? { color: theme.colors.onSurfaceVariant }
+              : { color: theme.colors.onSecondary },
+          ]}
+          variant="bodyMedium"
+        >
+          {item.content}
+        </Text>
       </View>
     </View>
   )
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
       <FlatList
         data={messages}
         renderItem={renderMessage}
         keyExtractor={(item, index) => index.toString()}
       />
 
-      <View style={styles.inputContainer}>
-        <View style={styles.textInputContainer}>
-          <TextInput
-            style={styles.textInput}
-            value={input}
-            onChangeText={setInput}
-            placeholder="Type your message"
-            multiline
-          />
-        </View>
-        <IconButton icon="send" size={24} style={styles.sendButton} />
+      <View
+        style={[
+          styles.inputContainer,
+          { backgroundColor: theme.colors.surfaceContainer },
+        ]}
+      >
+        <Searchbar
+          placeholder="Type your message"
+          icon={'format-letter-case'}
+          value={input}
+          onChangeText={setInput}
+          style={{
+            flex: 1,
+            backgroundColor: theme.colors.surfaceDim,
+            color: theme.colors.onSurface,
+          }}
+          right={() => (
+            <IconButton
+              icon="send"
+              size={24}
+              iconColor={theme.colors.onSurfaceVariant}
+              onPress={() => console.log('Sending message...')}
+            />
+          )}
+          multiline
+        />
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0D0D0D',
-  },
   messageContainer: {
     paddingHorizontal: 16,
     paddingTop: 16,
@@ -71,38 +97,21 @@ const styles = StyleSheet.create({
   },
   userMessageBubble: {
     alignSelf: 'flex-end',
-    backgroundColor: '#212121',
+    borderRadius: 20,
+    borderBottomRightRadius: 8,
   },
   assistantMessageBubble: {
-    backgroundColor: '#0D0D0D',
     alignSelf: 'flex-start',
+    borderRadius: 20,
+    borderBottomLeftRadius: 8,
   },
   messageText: {
-    fontSize: 16,
     flexWrap: 'wrap',
-    color: '#fff',
     alignSelf: 'center',
   },
   inputContainer: {
     flexDirection: 'row',
     padding: 16,
-  },
-  textInputContainer: {
-    flex: 1,
-    borderWidth: 2,
-    borderColor: '#2F2F2F',
-    borderRadius: 16,
-    minHeight: 40,
-    backgroundColor: '#242424',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
-  },
-  textInput: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  sendButton: {
-    alignSelf: 'flex-end',
   },
 })
 

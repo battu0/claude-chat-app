@@ -1,15 +1,16 @@
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
+import { Icon } from 'react-native-paper'
 import {
   DrawerContentScrollView,
   DrawerItem,
   createDrawerNavigator,
 } from '@react-navigation/drawer'
+import * as Updates from 'expo-updates'
 import HomeScreen from '../screens/HomeScreen'
 import Chat from '../screens/Chat'
-import { Icon } from 'react-native-paper'
 import APIKeyPage from '../screens/APIKeyPage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import * as Updates from 'expo-updates'
+import Header from '../components/Header'
 
 const Drawer = createDrawerNavigator()
 
@@ -70,10 +71,10 @@ function DrawerNavigation() {
       initialRouteName="Chat"
       drawerContent={CustomDrawerContent}
       screenOptions={{
-        // headerTintColor: '#fff',
         drawerType: isLargeScreen ? 'permanent' : 'front',
-        // Header left's default icon is menu
-        // headerLeft:
+        header: ({ navigation, route }) => (
+          <Header navigation={navigation} route={route} />
+        ),
       }}
     >
       <Drawer.Screen name="Home" component={HomeScreen} />
