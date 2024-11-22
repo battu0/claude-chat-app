@@ -1,5 +1,11 @@
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
-import { Icon } from 'react-native-paper'
+import {
+  Icon,
+  Text,
+  Switch,
+  Drawer as PaperDrawer,
+  useTheme,
+} from 'react-native-paper'
 import {
   DrawerContentScrollView,
   DrawerItem,
@@ -11,51 +17,55 @@ import Chat from '../screens/Chat'
 import APIKeyPage from '../screens/APIKeyPage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Header from '../components/Header'
+import { PreferencesContext } from '../context/PreferencesContext'
+import { useContext } from 'react'
 
 const Drawer = createDrawerNavigator()
 
 function CustomDrawerContent(props) {
+  const { toggleTheme, isThemeDark } = useContext(PreferencesContext)
+
   return (
     <View style={styles.container}>
       <DrawerContentScrollView {...props}>
-        <DrawerItem
-          label="Home"
-          labelStyle={styles.drawerItemLabel}
-          icon={() => <Icon source="home" size={24} />}
-          onPress={() => props.navigation.navigate('Home')}
-        />
-        <DrawerItem
-          label="Chat"
-          labelStyle={styles.drawerItemLabel}
-          icon={() => <Icon source="chat" size={24} />}
-          onPress={() => props.navigation.navigate('Chat')}
-        />
+        <PaperDrawer.Section>
+          <PaperDrawer.Item
+            label="Chat"
+            icon="chat"
+            onPress={() => props.navigation.navigate('Chat')}
+          />
+        </PaperDrawer.Section>
+        <PaperDrawer.Section title="Preferences">
+          <PaperDrawer.Item
+            label="Switch theme"
+            right={() => (
+              <Switch value={isThemeDark} onValueChange={toggleTheme} />
+            )}
+          />
+          <PaperDrawer.Item
+            label="API Key"
+            icon={'key'}
+            // onPress={() => props.navigation.navigate('Chat')}
+            onPress={() => console.log('navigate to API key page')}
+          />
+          <PaperDrawer.Item
+            label="Usage"
+            icon={'podium'}
+            // onPress={openUsagePage}
+            onPress={() => console.log('navigate to usage page web')}
+          />
+        </PaperDrawer.Section>
       </DrawerContentScrollView>
 
       <View style={styles.footerContainer}>
-        <DrawerItem
+        <PaperDrawer.Item
           label="Reload App"
-          labelStyle={styles.drawerItemLabel}
-          icon={() => <Icon source="reload" size={24} />}
+          icon={'reload'}
           // onPress={() => props.navigation.navigate('Chat')}
           onPress={async () => {
             await AsyncStorage.removeItem('viewed-onboarding')
             await Updates.reloadAsync()
           }}
-        />
-        <DrawerItem
-          label="API Key"
-          labelStyle={styles.drawerItemLabel}
-          icon={() => <Icon source="key" size={24} />}
-          // onPress={() => props.navigation.navigate('Chat')}
-          onPress={() => console.log('navigate to API key page')}
-        />
-        <DrawerItem
-          label="Usage"
-          labelStyle={styles.drawerItemLabel}
-          icon={() => <Icon source="podium" size={24} />}
-          // onPress={openUsagePage}
-          onPress={() => console.log('navigate to usage page web')}
         />
       </View>
     </View>
@@ -101,6 +111,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     marginBottom: 20,
     paddingTop: 10,
+  },
+  toggleDark: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
 })
 

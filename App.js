@@ -1,9 +1,7 @@
 import './gesture-handler.native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { View, ActivityIndicator } from 'react-native'
 import {
-  MD3DarkTheme,
-  MD3LightTheme,
   PaperProvider,
   adaptNavigationTheme,
   configureFonts,
@@ -15,8 +13,8 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   DarkTheme as NavigationDarkTheme,
 } from '@react-navigation/native'
-// import MaterialTheme from './material-theme.json'
 import { MaterialThemeDark, MaterialThemeLight } from './utils/theme'
+import { PreferencesContext } from './context/PreferencesContext'
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -46,9 +44,21 @@ const CombinedDarkTheme = {
 export default function App() {
   const [loading, setLoading] = useState(true)
   const [viewedOnboarding, setViewedOnboarding] = useState(false)
+  const [isThemeDark, setIsThemeDark] = useState(false)
 
-  // console.log('Material Theme: ', CombinedDarkTheme.colors.surfaceContainer)
-  // console.log('Navigation Light Theme: ', LightTheme)
+  let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme
+
+  const toggleTheme = useCallback(() => {
+    return setIsThemeDark(!isThemeDark)
+  }, [isThemeDark])
+
+  const preferences = useMemo(
+    () => ({
+      toggleTheme,
+      isThemeDark,
+    }),
+    [toggleTheme, isThemeDark]
+  )
 
   const Loading = () => {
     return (
@@ -82,14 +92,16 @@ export default function App() {
   }
 
   return (
-    <PaperProvider theme={CombinedDefaultTheme}>
-      {loading ? (
-        <Loading />
-      ) : viewedOnboarding ? (
-        <RootNavigator theme={CombinedDefaultTheme} />
-      ) : (
-        <Onboarding onSetViewedOnboarding={handleSetViewedOnboarding} />
-      )}
-    </PaperProvider>
+    <PreferencesContext.Provider value={preferences}>
+      <PaperProvider theme={theme}>
+        {loading ? (
+          <Loading />
+        ) : viewedOnboarding ? (
+          <RootNavigator theme={theme} />
+        ) : (
+          <Onboarding onSetViewedOnboarding={handleSetViewedOnboarding} />
+        )}
+      </PaperProvider>
+    </PreferencesContext.Provider>
   )
 }
