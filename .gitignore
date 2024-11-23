@@ -39,9 +39,3 @@ yarn-error.*
 
 # formatter
 .prettierrc
-
-# test
-data.json
-
-# graphs
-/graphs

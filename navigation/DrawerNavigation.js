@@ -1,14 +1,8 @@
+import { useContext } from 'react'
 import { View, StyleSheet, useWindowDimensions } from 'react-native'
-import {
-  Icon,
-  Text,
-  Switch,
-  Drawer as PaperDrawer,
-  useTheme,
-} from 'react-native-paper'
+import { Switch, Drawer as PaperDrawer } from 'react-native-paper'
 import {
   DrawerContentScrollView,
-  DrawerItem,
   createDrawerNavigator,
 } from '@react-navigation/drawer'
 import * as Updates from 'expo-updates'
@@ -18,12 +12,16 @@ import APIKeyPage from '../screens/APIKeyPage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Header from '../components/Header'
 import { PreferencesContext } from '../context/PreferencesContext'
-import { useContext } from 'react'
+import * as WebBrowser from 'expo-web-browser'
 
 const Drawer = createDrawerNavigator()
 
-function CustomDrawerContent(props) {
+const CustomDrawerContent = (props) => {
   const { toggleTheme, isThemeDark } = useContext(PreferencesContext)
+
+  const handleOpenUsagePage = () => {
+    WebBrowser.openBrowserAsync('https://console.anthropic.com/settings/usage')
+  }
 
   return (
     <View style={styles.container}>
@@ -51,8 +49,7 @@ function CustomDrawerContent(props) {
           <PaperDrawer.Item
             label="Usage"
             icon={'podium'}
-            // onPress={openUsagePage}
-            onPress={() => console.log('navigate to usage page web')}
+            onPress={handleOpenUsagePage}
           />
         </PaperDrawer.Section>
       </DrawerContentScrollView>
@@ -72,7 +69,7 @@ function CustomDrawerContent(props) {
   )
 }
 
-function DrawerNavigation() {
+const DrawerNavigation = () => {
   const dimensions = useWindowDimensions()
   const isLargeScreen = dimensions.width >= 768
 
@@ -102,9 +99,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-  },
-  drawerItemLabel: {
-    // color: '#fff',
   },
   footerContainer: {
     borderTopColor: '#ffffff33',
