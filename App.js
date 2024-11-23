@@ -1,4 +1,3 @@
-import './gesture-handler.native'
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { View, ActivityIndicator } from 'react-native'
 import {
@@ -15,6 +14,7 @@ import {
 } from '@react-navigation/native'
 import { MaterialThemeDark, MaterialThemeLight } from './utils/theme'
 import { PreferencesContext } from './context/PreferencesContext'
+import { ApiKeyContextProvider } from './context/ApiKeyContext'
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -92,16 +92,18 @@ export default function App() {
   }
 
   return (
-    <PreferencesContext.Provider value={preferences}>
-      <PaperProvider theme={theme}>
-        {loading ? (
-          <Loading />
-        ) : viewedOnboarding ? (
-          <RootNavigator theme={theme} />
-        ) : (
-          <Onboarding onSetViewedOnboarding={handleSetViewedOnboarding} />
-        )}
-      </PaperProvider>
-    </PreferencesContext.Provider>
+    <ApiKeyContextProvider>
+      <PreferencesContext.Provider value={preferences}>
+        <PaperProvider theme={theme}>
+          {loading ? (
+            <Loading />
+          ) : viewedOnboarding ? (
+            <RootNavigator theme={theme} />
+          ) : (
+            <Onboarding onSetViewedOnboarding={handleSetViewedOnboarding} />
+          )}
+        </PaperProvider>
+      </PreferencesContext.Provider>
+    </ApiKeyContextProvider>
   )
 }

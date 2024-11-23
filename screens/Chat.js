@@ -1,7 +1,15 @@
 import Anthropic from '@anthropic-ai/sdk'
 import React, { useState, useRef } from 'react'
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ActivityIndicator,
+  Platform,
+  Alert,
+} from 'react-native'
 import { IconButton, Searchbar, Text, useTheme } from 'react-native-paper'
+import { useApiKeyContext } from '../context/ApiKeyContext'
 
 const Chat = () => {
   const [messages, setMessages] = useState([])
@@ -11,7 +19,21 @@ const Chat = () => {
 
   const theme = useTheme()
 
+  const { apiKey } = useApiKeyContext()
+
   const sendMessage = async (message) => {
+    // Check whether API key is present
+    if (!apiKey) {
+      const errorMessage = 'No API key found'
+      if (Platform.OS === 'web') {
+        window.alert(errorMessage)
+      } else {
+        Alert.alert('Error', errorMessage)
+      }
+      // Terminate the process
+      return
+    }
+
     // Create a new user message
     const userMessage = {
       role: 'user',
@@ -28,7 +50,7 @@ const Chat = () => {
     try {
       // Create Anthropic instance
       const anthropic = new Anthropic({
-        apiKey: process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY,
+        apiKey: apiKey,
       })
 
       // Get AI's response
