@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
-import { View, ActivityIndicator } from 'react-native'
+import { View, ActivityIndicator, Platform } from 'react-native'
 import {
   PaperProvider,
   adaptNavigationTheme,
@@ -83,7 +83,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    checkOnboarding()
+    if (Platform.OS !== 'web') {
+      checkOnboarding()
+    } else {
+      setLoading(false)
+    }
   }, [])
 
   const handleSetViewedOnboarding = async () => {
@@ -97,7 +101,7 @@ export default function App() {
         <PaperProvider theme={theme}>
           {loading ? (
             <Loading />
-          ) : viewedOnboarding ? (
+          ) : viewedOnboarding || Platform.OS === 'web' ? (
             <RootNavigator theme={theme} />
           ) : (
             <Onboarding onSetViewedOnboarding={handleSetViewedOnboarding} />

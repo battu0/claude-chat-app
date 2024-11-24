@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { View, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, StyleSheet, useWindowDimensions, Platform } from 'react-native'
 import { Switch, Drawer as PaperDrawer } from 'react-native-paper'
 import {
   DrawerContentScrollView,
@@ -36,9 +36,15 @@ const CustomDrawerContent = (props) => {
         <PaperDrawer.Section title="Preferences">
           <PaperDrawer.Item
             label="Switch theme"
-            right={() => (
-              <Switch value={isThemeDark} onValueChange={toggleTheme} />
-            )}
+            // On web Switch component doensn't work.
+            right={
+              Platform.OS !== 'web'
+                ? () => (
+                    <Switch value={isThemeDark} onValueChange={toggleTheme} />
+                  )
+                : null
+            }
+            onPress={toggleTheme}
           />
           <PaperDrawer.Item
             label="API Key"

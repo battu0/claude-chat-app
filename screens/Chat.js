@@ -167,6 +167,10 @@ const Chat = () => {
           { backgroundColor: theme.colors.surfaceContainer },
         ]}
       >
+        {/* Searchar is rendered as textarea on web
+            add padding to the top on web to center the
+            text vertically
+        */}
         <Searchbar
           placeholder="Type your message"
           icon={'format-letter-case'}
@@ -176,6 +180,10 @@ const Chat = () => {
             flex: 1,
             backgroundColor: theme.colors.surfaceDim,
             color: theme.colors.onSurface,
+            minHeight: 48,
+          }}
+          inputStyle={{
+            paddingTop: Platform.OS === 'web' ? 17 : 0,
           }}
           right={() => (
             <IconButton
