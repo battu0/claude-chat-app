@@ -49,8 +49,11 @@ const Chat = () => {
 
     try {
       // Create Anthropic instance
+      // dangerouslyAllowBrowser is set to true for enabling
+      // API in the browser
       const anthropic = new Anthropic({
         apiKey: apiKey,
+        dangerouslyAllowBrowser: true,
       })
 
       // Get AI's response
