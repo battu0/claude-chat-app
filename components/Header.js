@@ -1,5 +1,5 @@
 import React from 'react'
-import { Appbar, Icon } from 'react-native-paper'
+import { Appbar } from 'react-native-paper'
 
 const Header = ({ navigation, route }) => {
   const title = route.name
@@ -7,7 +7,7 @@ const Header = ({ navigation, route }) => {
   return (
     <Appbar.Header theme={{}}>
       <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
-      <Appbar.Content title={'Chat'} />
+      <Appbar.Content title={title} />
     </Appbar.Header>
   )
 }

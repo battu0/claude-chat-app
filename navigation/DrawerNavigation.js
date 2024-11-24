@@ -49,7 +49,6 @@ const CustomDrawerContent = (props) => {
           <PaperDrawer.Item
             label="API Key"
             icon={'key'}
-            // onPress={() => props.navigation.navigate('Chat')}
             onPress={() => props.navigation.navigate('APIKey')}
           />
           <PaperDrawer.Item
