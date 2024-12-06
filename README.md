@@ -31,4 +31,4 @@ npx expo start
 
 ![web-demo-video](https://github.com/user-attachments/assets/109c9531-655f-40e2-91ae-225ec31b858a)
 
-Contributioons are welcome.
+Contributions are welcome.
